@@ -1,5 +1,5 @@
 // Setting up the routes.
-
+// learning link https://expressjs.com/en/guide/routing.html
 const express   =   require('express');
 //It is pointing to the same instance of express in the original index.js
 
@@ -13,6 +13,11 @@ console.log('Router loaded');
 
 //Accessing HomeController
 router.get('/',homeController.home);
+
+//for any further routes,access from here
+//router.use('/routername',reuire('./routerfile'));
+//So index.js in the route is the main file for Routes and then we can go to other routes
+router.use('/users',require('./users'));
 
 //Exporting the routes to original index.js
 module.exports  =   router;
