@@ -1,0 +1,22 @@
+<!--
+    We need to install layout library 
+    npm install express-ejs-layouts  
+    This is a layout in which we have created a wrapper around body which is variable that means we 
+    can change it  -->
+<html>
+<head>
+    <title>
+        <%= title %>
+    </title>
+</head>
+<body>
+    <!-- Partial -->
+    <%- include('_header'); %> 
+
+    <!-- Variable Part -->
+    <%- body %>
+
+    <!-- Partial -->
+    <%- include('_footer'); %>    
+</body>
+</html>
