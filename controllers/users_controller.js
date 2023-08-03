@@ -1,3 +1,5 @@
+const User  =   require("../models/user");
+
 module.exports.profile  =   function(request,response){
     // response.end('<h1>User Profile</h1>');
 
@@ -23,6 +25,27 @@ module.exports.signIn   =   function(request,response){
 //Getting SignUp Data
 module.exports.create   =   function(request,response){
 
+    if(request.body.password != request.body.confirm_password){
+        return response.redirect('back');
+    }
+
+    User.findOne({email: request.body.email})
+    .then((user) => {
+        if(!user){
+            User.create(request.body)
+            .then(() =>{
+                return response.redirect('/users/sign-in');
+            })
+            .catch((err) => {
+                console.log('error in finding user in signing up');return
+            })
+        }else{
+            return response.redirect('back');
+        }
+    })
+    .catch((err) => {
+        if(err){console.log('error in finding user in signing up');return}
+    })
 }
 
 //Sign-In and create a session for the user
