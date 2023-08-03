@@ -15,7 +15,7 @@ console.log('Router loaded');
 router.get('/',homeController.home);
 
 //for any further routes,access from here
-//router.use('/routername',reuire('./routerfile'));
+//router.use('/routername',require('./routerfile'));
 //So index.js in the route is the main file for Routes and then we can go to other routes
 router.use('/users',require('./users'));
 
