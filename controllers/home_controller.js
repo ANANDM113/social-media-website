@@ -37,8 +37,17 @@ module.exports.home =   function(request,response){
 //This will post comment and also display user we will make use of mongoose populate concept
 //Post.find({}).populate('user'), this will prepopulate the user
 //https://mongoosejs.com/docs/populate.html
+//We are also populating comments for that specific post
 module.exports.home =   function(request,response){
-    Post.find({}).populate('user').exec()
+    Post.find({})
+    .populate('user')
+    .populate({
+        path: 'comments',
+        populate: {
+            path: 'user'
+        }
+    })
+    .exec()
     .then((posts) =>{
         return response.render('home',{
             title: "Codeial | Home",
