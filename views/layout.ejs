@@ -9,6 +9,8 @@
         <%= title %>
     </title>
     <link rel="stylesheet" href="/css/layout.css">
+    <link rel="stylesheet" href="/css/header.css">
+    <link rel="stylesheet" href="/css/footer.css">
     <!-- This will put the css styles of css static pages here -->
     <%- style %>
 </head>
@@ -16,8 +18,11 @@
     <!-- Partial -->
     <%- include('_header'); %> 
 
-    <!-- Variable Part -->
-    <%- body %>
+    <main id="layout-main">
+        <!-- Variable Part -->
+        <%- body %>
+    </main>
+
 
     <!-- Partial -->
     <%- include('_footer'); %>   
