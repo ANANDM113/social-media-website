@@ -19,5 +19,7 @@ router.get('/',homeController.home);
 //So index.js in the route is the main file for Routes and then we can go to other routes
 router.use('/users',require('./users'));
 router.use('/posts',require('./posts'));
+router.use('/comments',require('./comments'));
+
 //Exporting the routes to original index.js
 module.exports  =   router;
