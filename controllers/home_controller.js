@@ -1,5 +1,6 @@
 //module.exports will export (home) action outside. we will importing it in route
 
+/*
 module.exports.home =   function(request,response){
     //direct rendering it
     //return response.end('<h1>Express is up for Codeial!</h1>');
@@ -16,3 +17,33 @@ module.exports.home =   function(request,response){
         title: "Home"
     });
 }
+*/
+const Post  =   require('../models/post');
+
+//This will post comment on home.ejs but it will not display user
+/*
+module.exports.home =   function(request,response){
+
+    Post.find({}) //Post.find{} will select everything in Post.js(models)
+        .then((posts) =>{ 
+            return response.render('home',{
+                title: "Codeial | Home",
+                posts: posts
+            })
+        })    
+}
+*/
+
+//This will post comment and also display user we will make use of mongoose populate concept
+//Post.find({}).populate('user'), this will prepopulate the user
+//https://mongoosejs.com/docs/populate.html
+module.exports.home =   function(request,response){
+    Post.find({}).populate('user').exec()
+    .then((posts) =>{
+        return response.render('home',{
+            title: "Codeial | Home",
+            posts: posts
+        })
+    })
+}
+
