@@ -19,7 +19,7 @@ module.exports.home =   function(request,response){
 }
 */
 const Post  =   require('../models/post');
-
+const User  =   require('../models/user');
 //This will post comment on home.ejs but it will not display user
 /*
 module.exports.home =   function(request,response){
@@ -49,10 +49,16 @@ module.exports.home =   function(request,response){
     })
     .exec()
     .then((posts) =>{
-        return response.render('home',{
-            title: "Codeial | Home",
-            posts: posts
-        })
+
+        User.find({})
+        .then((users) => {
+            return response.render('home',{
+                title: "Codeial | Home",
+                posts: posts,
+                all_users: users
+            })
+        });
+
     })
 }
 
