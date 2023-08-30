@@ -22,3 +22,20 @@ module.exports.create   =   function(request,response){
         }
     })
 }
+
+module.exports.destroy  =   function(request,response){
+    Comment.findById(request.params.id)
+    .then((comment) => {
+        if(comment.user ==  request.user.id){
+            let postId  =   comment.post;
+            comment.deleteOne();
+
+            Post.findByIdAndUpdate(postId,{$pull: {comments: request.params.id}})
+            .then((post) => {
+                return response.redirect('back');
+            })
+        }else{
+            return response.redirect('back');
+        }
+    })
+}
