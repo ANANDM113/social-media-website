@@ -12,6 +12,18 @@ module.exports.profile  =   function(request,response){
     });
 }
 
+//updating name and email in profile page
+module.exports.update   =   function(request,response){
+    if(request.user.id  ==  request.params.id){
+        User.findByIdAndUpdate(request.params.id,request.body)
+        .then((user) => {
+            return response.redirect('back');
+        })
+    }else{
+        return response.status(401).send('Unauthorized');
+    }
+}
+
 //Render the signUp Page
 module.exports.signUp   =   function(request,response){
     if(request.isAuthenticated()){
