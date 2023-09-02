@@ -1,6 +1,8 @@
 const Post  =   require('../models/post');
 const Comment   =   require('../models/comment');
 
+//By Using then catch
+/*
 module.exports.create   =   function(request,response){
     Post.create({
 
@@ -15,14 +17,31 @@ module.exports.create   =   function(request,response){
         console.log('Error in Posting');
     })
 }
+*/
 
+//By using async await
+module.exports.create   =   async function(request,response){
+    try {
+        await Post.create({
+            content: request.body.content,
+            user: request.user._id
+        });
+        return response.redirect('back');        
+    } catch (error) {
+        console.log('Error',error);
+        return;
+    }
+
+}
+
+/*
 module.exports.destroy  =   function(request,response){
     //checking whether the post exist or not
     Post.findById(request.params.id)
     .then((post) => {
 
         //We are checking only that user should be able to delete the post who has written it
-        // .id means converting the object is ._id into string
+        // .id means converting the object is ._id(objectType) into string
         if(post.user == request.user.id){
             post.deleteOne();
             Comment.deleteMany({post: request.params.id})
@@ -33,4 +52,24 @@ module.exports.destroy  =   function(request,response){
             return response.redirect('back');
         }
     })
+}
+*/
+
+module.exports.destroy  =   async function(request,response){
+    
+    try {
+        let post =   await Post.findById(request.params.id);
+    
+        if(post.user    ==  request.user.id){
+            post.deleteOne();
+    
+            await Comment.deleteMany({post: request.params.id});
+            return response.redirect('back');
+        }else{
+            return response.redirect('back');
+        }
+    } catch (error) {
+        console.log('Error',error);
+        return;
+    }
 }

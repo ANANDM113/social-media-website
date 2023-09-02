@@ -24,6 +24,12 @@ const MongoStore    =   require('connect-mongo');
 //     prefix: '/css'
 // }));
 
+//Flash message
+const flash =   require('connect-flash');
+
+//Custom Middleware
+const customMware   =   require('./config/middleware');
+
 //MiddleWare
 app.use(express.urlencoded());
 app.use(cookieParser());
@@ -66,6 +72,9 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.use(passport.setAuthenticatedUser);
+
+app.use(flash());
+app.use(customMware.setFlash);
 
 //Using the express router imported from routes/index.js
 app.use('/',require('./routes'));

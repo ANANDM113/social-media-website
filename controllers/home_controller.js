@@ -38,6 +38,7 @@ module.exports.home =   function(request,response){
 //Post.find({}).populate('user'), this will prepopulate the user
 //https://mongoosejs.com/docs/populate.html
 //We are also populating comments for that specific post
+/*
 module.exports.home =   function(request,response){
     Post.find({})
     .populate('user')
@@ -61,4 +62,29 @@ module.exports.home =   function(request,response){
 
     })
 }
+*/
 
+module.exports.home =   async function(request,response){
+    try {
+        let posts   =   await Post.find({})
+        .populate('user')
+        .populate({
+        path:'comments',
+        populate:{
+            path: 'user'
+        }
+     });
+
+        let users   =   await User.find({});
+
+        return response.render('home',{
+            title: "HOME",
+            posts: posts,
+            all_users: users
+        })
+    } catch (error) {
+        console.log('Error',error);
+        return;
+    }
+    
+}
