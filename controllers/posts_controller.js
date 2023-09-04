@@ -26,9 +26,10 @@ module.exports.create   =   async function(request,response){
             content: request.body.content,
             user: request.user._id
         });
+        request.flash('success','Post published');
         return response.redirect('back');        
     } catch (error) {
-        console.log('Error',error);
+        request.flash('error',error);
         return;
     }
 
@@ -64,12 +65,14 @@ module.exports.destroy  =   async function(request,response){
             post.deleteOne();
     
             await Comment.deleteMany({post: request.params.id});
+            request.flash('success','Post and assosciated comments deleted');
             return response.redirect('back');
         }else{
+            request.flash('error','You cannot delete this post');
             return response.redirect('back');
         }
     } catch (error) {
-        console.log('Error',error);
+        request.flash('error',error);
         return;
     }
 }
