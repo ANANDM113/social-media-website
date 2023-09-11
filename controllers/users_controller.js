@@ -1,4 +1,7 @@
 const User  =   require("../models/user");
+const fs    =   require('fs'); //filesystem
+const path  =   require('path');
+
 
 module.exports.profile  =   function(request,response){
     // response.end('<h1>User Profile</h1>');
@@ -13,6 +16,7 @@ module.exports.profile  =   function(request,response){
 }
 
 //updating name and email in profile page
+/*
 module.exports.update   =   function(request,response){
     if(request.user.id  ==  request.params.id){
         User.findByIdAndUpdate(request.params.id,request.body)
@@ -21,6 +25,43 @@ module.exports.update   =   function(request,response){
         })
     }else{
         return response.status(401).send('Unauthorized');
+    }
+}
+*/
+
+module.exports.update   =   async function(request,response){
+    if(request.user.id  ==  request.params.id){
+        try {
+            let user    =   await User.findById(request.params.id);
+            User.uploadedAvatar(request,response,function(err){
+                if(err){
+                    console.log('Multer Error',err);
+                }
+                user.name   =   request.body.name;
+                user.email  =   request.body.email;
+
+                if(request.file){
+                    // Now the previous uploaded file will go away and new file will take its place
+                    if(user.avatar){
+                        fs.unlinkSync(path.join(__dirname,'..',user.avatar));
+                    }
+                }
+
+                //In not every request we will be uploading file so we put a check
+                if(request.file){
+                    //this is saving the path of the uploaded file into the avatar field in the user
+                    user.avatar =   User.avatarPath +   '/' +request.file.filename;
+                }
+                user.save();
+                return response.redirect('back');
+            })
+        } catch (error) {
+            request.flash('error',error);
+            return response.redirect('back');
+        }
+    }else{
+        request.flash('error','Unauthorized!');
+        return response.status(401).send('Unauthorized!');
     }
 }
 

@@ -22,10 +22,19 @@ module.exports.create   =   function(request,response){
 //By using async await
 module.exports.create   =   async function(request,response){
     try {
-        await Post.create({
+        let post    =  await Post.create({
             content: request.body.content,
             user: request.user._id
         });
+
+        if(request.xhr){
+            return response.status(200).json({
+                data:{
+                    post: post
+                },
+                message: "Post Created!"
+            });
+        }
         request.flash('success','Post published');
         return response.redirect('back');        
     } catch (error) {
@@ -65,6 +74,17 @@ module.exports.destroy  =   async function(request,response){
             post.deleteOne();
     
             await Comment.deleteMany({post: request.params.id});
+
+            if(request.xhr){
+                return response.status(200).json({
+                    data:{
+                        //sending post id back to ajax function from server to frontend
+                        post_id: request.params.id
+                    },
+                    message: "Post deleted"
+                });
+            }
+
             request.flash('success','Post and assosciated comments deleted');
             return response.redirect('back');
         }else{
