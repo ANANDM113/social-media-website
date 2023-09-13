@@ -71,6 +71,7 @@ module.exports.destroy  =   async function(request,response){
         let post =   await Post.findById(request.params.id);
     
         if(post.user    ==  request.user.id){
+            
             post.deleteOne();
     
             await Comment.deleteMany({post: request.params.id});
