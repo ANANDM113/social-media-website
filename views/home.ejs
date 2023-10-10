@@ -31,5 +31,26 @@
                 
             <% } %>
         </section>
+        <%- include('_chat_box') -%>
     </div>
-   <script src="/js/home_posts.js"></script>
+    <!-- Importing this script for creating the post and comments -->
+    <script src="/js/home_post_comments.js"></script>
+    <script src="/js/home_posts.js"></script>
+
+   <!-- Change: import the script file for toggle likes, also run it over for the already present posts
+    and comments on the page -->
+    <script src="/js/toggle_likes.js"></script>
+    <script>
+        $('.toggle-like-button').each(function(){
+            let self    =   this;
+            let toggleLike  =   new ToggleLike(self);
+        });
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.2/socket.io.js"></script>
+    <script src="/js/chat_engine.js"></script>
+    <!-- Initailizing the chat_engine class -->
+    <% if(locals.user){%>
+    <script>
+        new ChatEngine('user-chat-box','<%= locals.user.email %>')
+    </script>
+    <% } %>
